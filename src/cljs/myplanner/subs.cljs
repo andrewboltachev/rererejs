@@ -8,6 +8,12 @@
    (:name db)))
 
 (re-frame/reg-sub
+ :get
+ (fn [db path]
+   (let [path (if (sequential? path) path [path])]
+     (get-in db path))))
+
+(re-frame/reg-sub
  :active-panel
  (fn [db _]
    (:active-panel db)))
