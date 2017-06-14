@@ -61,11 +61,23 @@
   (let [active-panel (re-frame/subscribe [:active-panel])
         
         
-        types [:string "String"
-               :number "Number"
-               :vector "Vector"
-               :map "Map"]
-        types (partition 2 types)
+        types [{:name :string
+                :title "String"
+                :test string?
+                :empty ""}
+                ;{:name :number
+                ;:title "Number"
+                ; :test number?
+                ; :empty 0}
+               {:name :vector
+                :title "Vector"
+                :test vector?
+                :empty []}
+               {:name :map
+                :title "Map"
+                :test map?
+                :empty {}}]
+        ;types (partition 2 types)
         
             
         data (re-frame.core/subscribe [:get :data])
@@ -96,12 +108,12 @@
                {:componentClass "select"
                 :value (name (or (:type @data) :string))
                 :onChange #(re-frame/dispatch [:set [:data :type] (keyword (.. % -target -value))])}
-               (for [[k v] types]
-                 (let [k (name k)]
+               (for [t types]
+                 (let [k (-> t :name name)]
                     ^{:key k}
                     [:option
                       {:value k}
-                      v]))
+                      (:title t)]))
                ]
              ]
        
