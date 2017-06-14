@@ -4,7 +4,8 @@
                  [ring/ring-defaults "0.3.0"]
                  [compojure "1.6.0"]
                  [org.clojure/clojurescript "1.9.229"]
-                 [reagent "0.6.0"]
+                 [reagent "0.6.2" :exclude [cljsjs/react
+                                            cljsjs.react/dom]]
                  [re-frame "0.9.4"]
                  [bidi "2.1.1"]
                  [kibu/pushy "0.3.7"]]
