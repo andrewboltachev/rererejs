@@ -1,0 +1,4 @@
+(ns myplanner.db)
+
+(def default-db
+  {:name "re-frame"})
