@@ -9,7 +9,7 @@
 
 (re-frame/reg-sub
  :get
- (fn [db path]
+ (fn [db [_ path]]
    (let [path (if (sequential? path) path [path])]
      (get-in db path))))
 

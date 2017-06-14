@@ -5,10 +5,13 @@
 ;; home
 
 (defn home-panel []
-  (let [name (re-frame/subscribe [:name])]
+  (let [name_ (re-frame/subscribe [:name])
+        
+        ]
     (fn []
-      [:div (str "Hello from " @name ". This is the Home Page.")
-       [:div [:a {:href "/about"} "go to About Page"]]])))
+      (let [
+            ]
+      ))))
 
 
 ;; about
@@ -27,7 +30,19 @@
     (fn []
       [:div
         [:div "This is the Article #" (:id @route-params) " Page."]
-        [:div [:a {:href "/"} "go to Home Page"]]])))
+        [:div [:a {:href "/"} "go to Home Page"]]
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ])))
 
 
 ;; main
@@ -43,13 +58,66 @@
   [panels panel-name])
 
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-panel])]
-    (fn []
-      [:div.container
-       [:div.row
-        [:div.col-md-12
-         [:> js/ReactBootstrap.Button
-          {:on-click
-           #(re-frame/dispatch [:say-hello "World"])}
-          "Foo"]
-         [show-panel @active-panel]]]])))
+  (let [active-panel (re-frame/subscribe [:active-panel])
+        
+        
+        types [:string "String"
+               :number "Number"
+               :vector "Vector"
+               :map "Map"]
+        types (partition 2 types)
+        
+            
+        data (re-frame.core/subscribe [:get :data])
+        
+        ]
+        [:div.container
+         [:div.row
+          [:div.col-md-6.col-md-offset-3
+            [:h1 "Data"]
+           #_[:> js/ReactBootstrap.Button
+            {:on-click
+             #(re-frame/dispatch [:say-hello "World"])}
+            "Foo"]
+           ;[show-panel @active-panel]
+
+
+
+       
+       [:form
+            [:>
+             js/ReactBootstrap.FormGroup
+             {:controlId "type"}
+              [:> js/ReactBootstrap.ControlLabel
+               "Type"]
+             ;(println "value" (:type @data))
+              [:>
+               js/ReactBootstrap.FormControl
+               {:componentClass "select"
+                :value (name (or (:type @data) :string))
+                :onChange #(re-frame/dispatch [:set [:data :type] (keyword (.. % -target -value))])}
+               (for [[k v] types]
+                 (let [k (name k)]
+                    ^{:key k}
+                    [:option
+                      {:value k}
+                      v]))
+               ]
+             ]
+       
+       
+       
+       
+       
+       
+       
+       ]
+
+
+
+
+
+
+
+
+           ]]]))
