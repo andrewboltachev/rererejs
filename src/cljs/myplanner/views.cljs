@@ -45,4 +45,11 @@
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
-      [show-panel @active-panel])))
+      [:div.container
+       [:div.row
+        [:div.col-md-12
+         [:> js/ReactBootstrap.Button
+          {:on-click
+           #(re-frame/dispatch [:say-hello "World"])}
+          "Foo"]
+         [show-panel @active-panel]]]])))
