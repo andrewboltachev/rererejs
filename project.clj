@@ -1,9 +1,13 @@
 (defproject myplanner "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [ring "1.6.1"]
+                 [ring/ring-defaults "0.3.0"]
+                 [compojure "1.6.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.0"]
                  [re-frame "0.9.4"]
-                 [secretary "1.2.3"]]
+                 [bidi "2.1.1"]
+                 [kibu/pushy "0.3.7"]]
 
   :plugins [[lein-cljsbuild "1.1.4"]]
 
@@ -13,7 +17,8 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :ring-handler myplanner.core/app}
 
   :profiles
   {:dev
@@ -30,7 +35,7 @@
      :compiler     {:main                 myplanner.core
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "js/compiled/out"
+                    :asset-path           "/js/compiled/out"
                     :source-map-timestamp true
                     :preloads             [devtools.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}

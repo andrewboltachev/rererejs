@@ -9,5 +9,6 @@
 
 (re-frame/reg-event-db
  :set-active-panel
- (fn [db [_ active-panel]]
-   (assoc db :active-panel active-panel)))
+ (fn [db [_ active-panel route-params]]
+   (merge db {:active-panel active-panel
+              :route-params route-params})))
