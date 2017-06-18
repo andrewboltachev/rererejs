@@ -61,26 +61,40 @@
   (let [active-panel (re-frame/subscribe [:active-panel])
         
         
-        types [{:name :string
+        types [{:key nil
+                :title "Nil"
+                :test nil?
+                :empty nil}
+               {:key :string
                 :title "String"
                 :test string?
                 :empty ""}
-                ;{:name :number
+                ;{:key :number
                 ;:title "Number"
                 ; :test number?
                 ; :empty 0}
-               {:name :vector
+               {:key :vector
                 :title "Vector"
                 :test vector?
                 :empty []}
-               {:name :map
+               {:key :map
                 :title "Map"
                 :test map?
                 :empty {}}]
+        value->type
+        (fn [v]
+          (first (filter #((:test %) v) types)))
+        type->its-key-as-str
+        (fn [t]
+          (let [k (:key t)]
+            (if (nil? k) "" (name k))))
         ;types (partition 2 types)
+        its-key->type
+        (fn [k]
+          (first (filter #(= (:key %) k) types)))
         
             
-        data (re-frame.core/subscribe [:get :data])
+        data @(re-frame.core/subscribe [:get :data])
         
         ]
         [:div.container
@@ -96,7 +110,15 @@
 
 
        
+           (let [t
+                 (value->type data)
+                 _ (js/console.log "data is" data (type data) t)
+                 ]
+             [:div
        [:form
+        {:on-submit #(do
+                       (.predentDefault %)
+                       false)}
             [:>
              js/ReactBootstrap.FormGroup
              {:controlId "type"}
@@ -106,10 +128,15 @@
               [:>
                js/ReactBootstrap.FormControl
                {:componentClass "select"
-                :value (name (or (:type @data) :string))
-                :onChange #(re-frame/dispatch [:set [:data :type] (keyword (.. % -target -value))])}
+                :value (type->its-key-as-str t)
+                :onChange #(re-frame/dispatch [:set :data (:empty
+                                                            (its-key->type
+                                                            (keyword
+                                                              (.. % -target -value)))
+                                                            
+                                                            )])}
                (for [t types]
-                 (let [k (-> t :name name)]
+                 (let [k (type->its-key-as-str t)]
                     ^{:key k}
                     [:option
                       {:value k}
@@ -117,13 +144,38 @@
                ]
              ]
        
+       [:>
+             js/ReactBootstrap.FormGroup
+             {:controlId "data"}
+              [:> js/ReactBootstrap.ControlLabel
+               "Data"]
+        (cond
+          (= (:key t) nil)
+              ^{:key ""}
+          [:>
+               js/ReactBootstrap.FormControl
+               {:defaultValue "Nil"
+                :disabled true}
+               ]
+
+          (= (:key t) :string)
+              ^{:key "string"}
+              [:>
+               js/ReactBootstrap.FormControl
+               {:value data
+                :onChange #(re-frame/dispatch
+                             [:set :data ])}
+               ]
+          :else
+          [:div
+           "Data input not implemented"])
+             ]
        
        
        
        
        
-       
-       ]
+       ]])
 
 
 

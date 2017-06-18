@@ -21,6 +21,7 @@
 (re-frame/reg-event-db
  :set
  (fn [db [_ path value]]
+   (js/console.log :set path value)
    (let [path (if (sequential? path) path [path])]
      (assoc-in db path value))))
 

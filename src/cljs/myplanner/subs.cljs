@@ -10,6 +10,7 @@
 (re-frame/reg-sub
  :get
  (fn [db [_ path]]
+   (js/console.log :get path)
    (let [path (if (sequential? path) path [path])]
      (get-in db path))))
 
