@@ -176,72 +176,38 @@
 
 
 
-
-
-
-
- ListItem
- (.createClass
-  js/React
-  #js {:displayName "SortableListItem", :render (fn [] (this-as this
-                                                                (reagent/as-component [:div {:className "list-group-item"} (.-children (.-props this))])))})
-
-
-SortableListItem (js/ReactSortable.sortable ListItem)
+SortableItem (js/SortableElement (fn [__obj0] (let [value (.-value __obj0)]
+                                             (reagent/as-component
+                                             [:li {} value]))))
 
 
  SortableList
+ (js/SortableContainer
+  (fn
+   [__obj0]
+   (let
+    [items (.-items __obj0)]
+ (reagent/as-component
+    (vec (concat [:ul
+     {}
+     "\n                    "]
+     (js->clj
+       (.map items (fn [value index] [:> SortableItem {:key (str "item-" index), :index index, :value value}])))
+     ["\n                                            "]))
+   ))))
+
+
+ SortableComponent
  (.createClass
   js/React
-  #js {:getInitialState
-       (fn []
-         (this-as this
-                  #js {:draggingIndex nil, :data (.-data (.-props this))})),
-       :updateState
-       (fn [obj]
-         (js/console.log "update state")
-         (this-as this
-                  (.updateState this obj))),
-       :render
-       (fn []
-         (this-as this
-                  (let [childProps #js {}
-                        listItems (.map (.-items (.-data (.-state this)))
-                                        (fn [item i]
-                                          (js/console.log i SortableListItem)
-                                          (this-as this
-                                                   (reagent/as-component
-                                                     [:>
-                                                      SortableListItem
-                                                    {:key i,
-                                                     :updateState (.-updateState this),
-                                                     :items (.-items (.-data (.-state this))),
-                                                     :draggingIndex (.-draggingIndex (.-state this)),
-                                                     :sortId i,
-                                                     :outline "list",
-                                                     :childProps childProps}
-                                                      (do
-                                                    item
-                                                        )
-                                                      ])))
-                                        this)]
-                    (reagent/as-component [:div {:className "list"} listItems]))))})
-
-
-
-
-
-
+  #js {:getInitialState (fn [] (let [] #js {:items (clj->js ["Item 1" "Item 2" "Item 3" "Item 4" "Item 5" "Item 6"])})), :onSortEnd (fn [__obj0] (this-as this (let [oldIndex (.-oldIndex __obj0) newIndex (.-newIndex __obj0)] (.setState this #js {:items (js/Sortable.arrayMove (.-items (.-state this)) oldIndex newIndex)})))), :render (fn [] (this-as this (reagent/as-component [:> SortableList {:items (.-items (.-state this)), :onSortEnd (.-onSortEnd this)}])))})
 
 
 
 
                 ]
-              ;js/ReactSortable.sortable
-            [:div
-             [:>
-              js/SortableList
-              {:data #js {:items #js ["Foo" "Bar" "Buz"]}}]])
+            [:> SortableComponent]
+            )
               
           :else
           [:div
