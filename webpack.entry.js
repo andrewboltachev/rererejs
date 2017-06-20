@@ -6,3 +6,4 @@ return y; };
 window.React = require('react');
 window.ReactDOM = require('react-dom');
 window.ReactBootstrap = require('react-bootstrap');
+window.ReactSortable = require('react-sortable');

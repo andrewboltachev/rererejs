@@ -1,5 +1,6 @@
 (ns myplanner.views
-  (:require [re-frame.core :as re-frame]))
+  (:require [re-frame.core :as re-frame]
+            [reagent.core :as reagent]))
 
 
 ;; home
@@ -166,6 +167,82 @@
                 :onChange #(re-frame/dispatch
                              [:set :data ])}
                ]
+
+          (= (:key t) :vector)
+              ^{:key "vector"}
+          (let [
+                ;list-item (fn [title]
+                ;            [:li.list-group-item title])
+
+
+
+
+
+
+
+ ListItem
+ (.createClass
+  js/React
+  #js {:displayName "SortableListItem", :render (fn [] (this-as this
+                                                                (reagent/as-component [:div {:className "list-group-item"} (.-children (.-props this))])))})
+
+
+SortableListItem (js/ReactSortable.sortable ListItem)
+
+
+ SortableList
+ (.createClass
+  js/React
+  #js {:getInitialState
+       (fn []
+         (this-as this
+                  #js {:draggingIndex nil, :data (.-data (.-props this))})),
+       :updateState
+       (fn [obj]
+         (js/console.log "update state")
+         (this-as this
+                  (.updateState this obj))),
+       :render
+       (fn []
+         (this-as this
+                  (let [childProps #js {}
+                        listItems (.map (.-items (.-data (.-state this)))
+                                        (fn [item i]
+                                          (js/console.log i SortableListItem)
+                                          (this-as this
+                                                   (reagent/as-component
+                                                     [:>
+                                                      SortableListItem
+                                                    {:key i,
+                                                     :updateState (.-updateState this),
+                                                     :items (.-items (.-data (.-state this))),
+                                                     :draggingIndex (.-draggingIndex (.-state this)),
+                                                     :sortId i,
+                                                     :outline "list",
+                                                     :childProps childProps}
+                                                      (do
+                                                    item
+                                                        )
+                                                      ])))
+                                        this)]
+                    (reagent/as-component [:div {:className "list"} listItems]))))})
+
+
+
+
+
+
+
+
+
+
+                ]
+              ;js/ReactSortable.sortable
+            [:div
+             [:>
+              js/SortableList
+              {:data #js {:items #js ["Foo" "Bar" "Buz"]}}]])
+              
           :else
           [:div
            "Data input not implemented"])
