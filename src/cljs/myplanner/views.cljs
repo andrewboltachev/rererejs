@@ -40,10 +40,13 @@
         data @(re-frame.core/subscribe [:get :data])
         
         ]
+    [:div
+        [:nav.navbar.navbar-default
+         [:a.navbar-brand
+          {:href "javascript:void(0)"} "Brand"]]
         [:div.container
          [:div.row
           [:div.col-md-6.col-md-offset-3
-            [:h1 "Data"]
            #_[:> js/ReactBootstrap.Button
             {:on-click
              #(re-frame/dispatch [:say-hello "World"])}
@@ -60,36 +63,29 @@
         {:on-submit #(do
                        (.predentDefault %)
                        false)}
-            [:>
-             js/ReactBootstrap.FormGroup
-             {:controlId "type"}
-              [:> js/ReactBootstrap.ControlLabel
-               "Type"]
-             ;(println "value" (:type @data))
-              [:>
-               js/ReactBootstrap.FormControl
-               {:componentClass "select"
-                :value (type->its-key-as-str t)
-                :onChange #(re-frame/dispatch [:set :data (:empty
-                                                            (its-key->type
-                                                            (keyword
-                                                              (.. % -target -value)))
-                                                            
-                                                            )])}
-               (for [t types]
-                 (let [k (type->its-key-as-str t)]
-                    ^{:key k}
-                    [:option
-                      {:value k}
-                      (:title t)]))
-               ]
-             ]
-       
-       [:>
-             js/ReactBootstrap.FormGroup
-             {:controlId "data"}
-              [:> js/ReactBootstrap.ControlLabel
-               "Data"]
+        [:div.btn-group.btn-group-justified
+         (for [type_ types]
+           ^{:key (-> type_ :key str)}
+        [:div.btn-group
+           [:button.btn.btn-default
+            (merge
+              {:type "button"
+               :on-click
+               #(re-frame/dispatch
+                  [:set :data (:empty
+                                (its-key->type
+                                  (:key type_)))])
+               }
+              (when (= t type_)
+                {:className "active"}))
+            ;{:style {:box-sizing "border-box"
+            ;         :width "20%"}}
+            (:title type_)]]
+         )]
+
+       [:div
+             ;js/ReactBootstrap.FormGroup
+             ;{:controlId "data"}
         (cond
           (= (:key t) nil)
               ^{:key ""}
@@ -175,6 +171,13 @@ SortableItem (js/SortableElement (fn [__obj0] (let [value (.-value __obj0)]
            "Data input not implemented"])
              ]
        
+       [:>
+             js/ReactBootstrap.FormGroup
+             {:controlId "button"}
+        [:button.btn.btn-success.btn-block
+         {:type "button"}
+         "Save"]
+        ]
        
        
        
@@ -188,4 +191,4 @@ SortableItem (js/SortableElement (fn [__obj0] (let [value (.-value __obj0)]
 
 
 
-           ]]]))
+           ]]]]))
