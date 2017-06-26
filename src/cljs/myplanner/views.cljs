@@ -165,7 +165,7 @@
                js/ReactBootstrap.FormControl
                {:value data
                 :onChange #(re-frame/dispatch
-                             [:set :data ])}
+                             [:set :data (.. % -target -value)])}
                ]
 
           (= (:key t) :vector)
@@ -178,7 +178,28 @@
 
 SortableItem (js/SortableElement (fn [__obj0] (let [value (.-value __obj0)]
                                              (reagent/as-component
-                                             [:li {} value]))))
+                                             [:li.list-group-item {}
+                                              [:div
+                                               [:>
+             js/ReactBootstrap.FormGroup
+             {:controlId "data"}
+              [:> js/ReactBootstrap.ControlLabel
+               "Data"]
+                                                
+                                                [:>
+               js/ReactBootstrap.FormControl
+               {:value data
+                :onChange #(re-frame/dispatch
+                             [:set :data ])}
+               ]
+                                                ]
+
+
+
+
+
+                                               value]
+                                              ]))))
 
 
  SortableList
@@ -188,7 +209,7 @@ SortableItem (js/SortableElement (fn [__obj0] (let [value (.-value __obj0)]
    (let
     [items (.-items __obj0)]
  (reagent/as-component
-    (vec (concat [:ul
+    (vec (concat [:ul.list-group
      {}
      "\n                    "]
      (js->clj
