@@ -19,10 +19,11 @@
                 :title "Vector"
                 :test vector?
                 :empty []}
-               {:key :map
-                :title "Map"
-                :test map?
-                :empty {}}]
+               ;{:key :map
+               ; :title "Map"
+               ; :test map?
+               ; :empty {}}
+               ]
         value->type
         (fn [v]
           (first (filter #((:test %) v) types)))
@@ -41,7 +42,6 @@
         ]
         [:div.container
          [:div.row
-          [:a {:href "/about"} "About"]
           [:div.col-md-6.col-md-offset-3
             [:h1 "Data"]
            #_[:> js/ReactBootstrap.Button
